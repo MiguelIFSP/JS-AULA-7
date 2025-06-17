@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS</title>
+    <style>
+        .verde {
+            background-color: lightgreen;
+        }
+        .amarelo {
+            background-color: yellow;
+        }
+        .vermelho {
+            background-color: salmon;
+        }
+         table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        window.onload = inicio;
+
+        function inicio() {
+            let situa = document.getElementById('situacao1');
+            situa.addEventListener('change', lidarMudancaSituacao);
+
+            let botaoAdicionar = document.getElementById('adicionarTarefaBtn');
+            botaoAdicionar.addEventListener('click', adicionarTarefaSelect);
+        }
+
+        function lidarMudancaSituacao() {
+            let selectCampo = document.getElementById('situacao1');
+            let rotulo = document.getElementById('rotulo1');
+            let valorSelecionado = selectCampo.value;
+            let nomeTarefa = rotulo.textContent;
+
+            rotulo.className = '';
+
+            if (valorSelecionado === 'atribuida') {
+                rotulo.className = 'verde';
+            } else if (valorSelecionado === 'parada') {
+                rotulo.className = 'amarelo';
+            } else if (valorSelecionado === 'rejeitada') {
+                rotulo.className = 'vermelho';
+            }
+
+            if (valorSelecionado === 'fim') {
+                 adicionarTarefaConcluidaTabela(nomeTarefa);
+            }
+         }
+
+        function adicionarTarefaSelect() {
+            let campoTexto = document.getElementById('novaTarefaTexto');
+            let valorTarefa = campoTexto.value;
+
+            if (valorTarefa.trim() === '') {
+                return;
+            }
+
+            let novaOpcao = document.createElement('option');
+            novaOpcao.value = valorTarefa.toLowerCase().replace(/\s+/g, '_');
+            novaOpcao.textContent = valorTarefa;
+
+            let select = document.getElementById('situacao1');
+            select.appendChild(novaOpcao);
+
+            campoTexto.value = '';
+        }
+
+        function adicionarTarefaConcluidaTabela(nomeTarefa) {
+             let tabela = document.getElementById('tabelaTarefas');
+             if (!tabela) {
+                 console.log("Tabela de tarefas concluídas não encontrada.");
+                 return;
+             }
+             let corpoTabela = tabela.getElementsByTagName('tbody')[0];
+
+             let agora = new Date();
+             let dataFormatada = agora.getDate() + '/' + (agora.getMonth() + 1) + '/' + agora.getFullYear();
+
+             let novaLinha = corpoTabela.insertRow();
+
+             let celulaTarefa = novaLinha.insertCell(0);
+             let celulaData = novaLinha.insertCell(1);
+
+             celulaTarefa.textContent = nomeTarefa;
+             celulaData.textContent = dataFormatada;
+        }
+    </script>
+</head>
+<body>
+    <h1>Gerenciador de Tarefas</h1>
+    <div>
+        <select id="situacao1">
+            <option value="inicio">Aguardando</option>
+            <option value="atribuida">Em andamento</option>
+            <option value="parada">Pausada</option>
+            <option value="rejeitada">Rejeitada</option>
+            <option value="fim">Concluída</option>
+        </select>
+        <label for="situacao1" id="rotulo1">Instalar impressora RH</label>
+    </div>
+    <br>
+    <div>
+        <label for="novaTarefaTexto">Nova Tarefa para o Select:</label>
+        <input type="text" id="novaTarefaTexto">
+        <input type="button" value="Adicionar ao Select" id="adicionarTarefaBtn">
+    </div>
+    <br>
+    <h3>Tarefas Concluídas:</h3>
+    <table id="tabelaTarefas">
+        <thead>
+            <tr>
+                <th>Tarefa</th>
+                <th>Data de Conclusão</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</body>
+</html>

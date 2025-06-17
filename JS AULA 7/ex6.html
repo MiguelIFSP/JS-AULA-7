@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalStorage Usuário</title>
+    <script>
+        window.onload = inicio;
+
+        function inicio() {
+            let botaoSalvar = document.getElementById('salvarBtn');
+            let botaoMostrar = document.getElementById('mostrarBtn');
+            let botaoApagar = document.getElementById('apagarBtn');
+
+            botaoSalvar.addEventListener('click', salvarDadosUsuario);
+            botaoMostrar.addEventListener('click', mostrarDadosUsuario);
+            botaoApagar.addEventListener('click', apagarDadosUsuario);
+        }
+
+        function salvarDadosUsuario() {
+            let campoNome = document.getElementById('nomeInput');
+            let campoEmail = document.getElementById('emailInput');
+
+            localStorage.setItem('nomeUsuario', campoNome.value);
+            localStorage.setItem('emailUsuario', campoEmail.value);
+        }
+
+        function mostrarDadosUsuario() {
+            let paragrafoSaida = document.getElementById('saida');
+
+            let nomeSalvo = localStorage.getItem('nomeUsuario');
+            let emailSalvo = localStorage.getItem('emailUsuario');
+
+            if (nomeSalvo || emailSalvo) {
+                paragrafoSaida.textContent = `Nome: ${nomeSalvo || "Não salvo"}, Email: ${emailSalvo || "Não salvo"}`;
+            } else {
+                paragrafoSaida.textContent = "Nenhum dado de usuário salvo encontrado.";
+            }
+        }
+
+        function apagarDadosUsuario() {
+            localStorage.removeItem('nomeUsuario');
+            localStorage.removeItem('emailUsuario');
+
+            let paragrafoSaida = document.getElementById('saida');
+            paragrafoSaida.textContent = "Dados de usuário apagados.";
+        }
+    </script>
+</head>
+<body>
+    <h1>Dados de Usuário no LocalStorage</h1>
+    <label for="nomeInput">Nome:</label>
+    <input type="text" id="nomeInput"><br><br>
+
+    <label for="emailInput">Email:</label>
+    <input type="text" id="emailInput"><br><br>
+
+    <input type="button" value="Salvar Dados" id="salvarBtn">
+    <input type="button" value="Mostrar Dados Salvos" id="mostrarBtn">
+    <input type="button" value="Apagar Dados Salvos" id="apagarBtn">
+
+    <p id="saida"></p>
+</body>
+</html>
